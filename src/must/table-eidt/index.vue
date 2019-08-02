@@ -1,58 +1,108 @@
 <template>
-  <el-table :data="tableData">
-    <el-table-column v-for="(col) in clolumns" :key="col.prop" v-bind="col"></el-table-column>
-  </el-table>
+  <div>
+    <el-table :data="tableData" border sytle="width:400px" @cell-dblclick="handleChange">
+      <el-table-column v-for="(col) in clolumns" :key="col.prop" v-bind="col"></el-table-column>
+    </el-table>
+    <h1>实现一个可以添加的表格</h1>
+    <h2>the think is :</h2>
+  </div>
 </template>
 
 <script>
 export default {
+  props: {
+    edit: {
+      type: Boolean,
+      default: true
+    }
+  },
+  created() {
+    this.edit && this.init();
+  },
   data() {
     return {
       tableData: [
         {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
+          date: "",
+          name: "",
+          address: ""
+          // edit: false
         }
       ],
       clolumns: [
         {
           prop: "date",
-          lable: "one"
+          label: "one",
+          formatter: (row, cloumcell, index) => {
+            console.log(row.edit);
+            if (row.edit) {
+              return (
+                <el-input value={row.date} onInput={e => (row.date = e)}>
+                  add it
+                </el-input>
+              );
+            } else {
+              return <span></span>;
+            }
+          }
         },
         {
           prop: "name",
-          lable: "one"
+          label: "one",
+          formatter: (row, cloumcell, index) => {
+            if (row.edit) {
+              return (
+                <el-input value={row.name} onInput={e => (row.name = e)}>
+                  add it
+                </el-input>
+              );
+            } else {
+              return <span></span>;
+            }
+          }
         },
         {
-          prop: "adress",
-          lable: "one"
+          prop: "address",
+          label: "one",
+          formatter: (row, cloumcell, index) => {
+            if (row.edit) {
+              return (
+                <el-input value={row.address} onInput={e => (row.address = e)}>
+                  add it
+                </el-input>
+              );
+            } else {
+              return <span>{row.address}</span>;
+            }
+          }
         },
         {
           prop: "select",
-          lable: "operate",
-
+          label: "operate",
           formatter: (row, cloumcell, index) => {
-            return <el-button>add it</el-button>;
+            return (
+              <el-button onClick={val => this.addList()}>add it</el-button>
+            );
           }
         }
       ]
     };
+  },
+
+  methods: {
+    //edit init option assign
+    init() {
+      this.tableData.map(list => {
+        this.$set(list, "edit", false);
+      });
+    },
+    addList(row, cell, index) {
+      debugger
+    },
+    handleChange(row, column, cell, event) {
+      console.log(row);
+      row.edit = !row.edit;
+    }
   }
 };
 </script>
