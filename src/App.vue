@@ -2,7 +2,14 @@
   <div id="app">
     <!-- <menu-nav></menu-nav> -->
     <!-- <mapDataFromComponey></mapDataFromComponey>  -->
-    <table-add :data="listGood" edit @addObject="addlist" @deletOneObject="deleteOneObject"></table-add>
+    <table-add
+      stripe
+      maxHeitght="400"
+      :data="listGood"
+      edit
+      @addObject="addlist"
+      @deletOneObject="deleteOneObject"
+    ></table-add>
     <!-- <conditionVue></conditionVue> -->
     <!-- <practice></practice> -->
     <!-- <simple :columns="columns" :data="tableData"></simple> -->
@@ -73,7 +80,14 @@ export default {
     addlist() {
       // debugger;
       !!this.listGood &&
-        this.listGood.push({ date: "", name: "", address: "" });
+        this.listGood.push({
+          date: "",
+          name: "",
+          address: "",
+          address2: "",
+          address3: "",
+          address4: ""
+        });
     },
     deleteOneObject(index) {
       !!this.listGood && this.listGood.splice(index, 1);
@@ -158,11 +172,15 @@ export default {
     return {
       listGood: [
         {
-          date: "",
+          date: "12",
           name: "",
-          address: "",
+          address: "32",
+          address2: "",
+          address3: "",
+          address4: ""
           // edit: false
-        }
+        },
+        
       ],
       list: "",
       columns: [

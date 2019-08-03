@@ -1,7 +1,14 @@
 <template>
   <div>
-    <el-table :data="data" border sytle="width:400px" @cell-dblclick="handleChange">
-      <el-table-column v-for="(col) in clolumns" :key="col.prop" v-bind="col"></el-table-column>
+    <el-table
+      :stripe="stripe"
+      :max-height="maxHeitght"
+      :data="data"
+      border
+      sytle="width:400px"
+      @cell-dblclick="handleChange"
+    >
+      <el-table-column :width="col.width" v-for="(col) in clolumns" :key="col.prop" v-bind="col"></el-table-column>
     </el-table>
     <h1>实现一个可以添加编辑的表格</h1>
     <h2>the think is : who's data who handlewith</h2>
@@ -11,6 +18,8 @@
 <script>
 export default {
   props: {
+    maxHeitght: String,
+    stripe: Boolean,
     edit: {
       type: Boolean,
       default: false
@@ -38,7 +47,8 @@ export default {
       clolumns: [
         {
           prop: "date",
-          label: "your date",
+          label: "option assgin",
+          width: "120",
           formatter: (row, cloumcell, index) => {
             console.log(row.edit);
             if (row.edit) {
@@ -54,7 +64,8 @@ export default {
         },
         {
           prop: "name",
-          label: " your name",
+          label: "option type",
+          width: "120",
           formatter: (row, cloumcell, index) => {
             if (row.edit) {
               return (
@@ -73,7 +84,8 @@ export default {
         },
         {
           prop: "address",
-          label: "your address",
+          label: "isRequired",
+          width: "140",
           formatter: (row, cloumcell, index) => {
             if (row.edit) {
               return (
@@ -87,13 +99,72 @@ export default {
           }
         },
         {
+          prop: "address2",
+          label: "optiondesc",
+          width: "130",
+          formatter: (row, cloumcell, index) => {
+            if (row.edit) {
+              return (
+                <el-input
+                  value={row.address2}
+                  onInput={e => (row.address2 = e)}
+                >
+                  add it
+                </el-input>
+              );
+            } else {
+              return <span>{row.address2}</span>;
+            }
+          }
+        },
+        {
+          prop: "address3",
+          label: "forExple option",
+          width: "130",
+          formatter: (row, cloumcell, index) => {
+            if (row.edit) {
+              return (
+                <el-input
+                  value={row.address3}
+                  onInput={e => (row.address3 = e)}
+                >
+                  add it
+                </el-input>
+              );
+            } else {
+              return <span>{row.address3}</span>;
+            }
+          }
+        },
+        {
+          prop: "address4",
+          label: "forExple option",
+          width: "120",
+          formatter: (row, cloumcell, index) => {
+            if (row.edit) {
+              return (
+                <el-input
+                  value={row.address4}
+                  onInput={e => (row.address4 = e)}
+                >
+                  add it
+                </el-input>
+              );
+            } else {
+              return <span>{row.address4}</span>;
+            }
+          }
+        },
+        {
           prop: "select",
           label: "operate",
+          width: "250",
           formatter: (row, cloumcell, index, evevt) => {
-            if (evevt !== 0) {
+            const has = row.name;
+            if (!has && evevt !== 0) {
               return (
                 <div>
-                  <el-button onClick={val => this.addList}>add_it</el-button>
+                  <el-button onClick={val => this.addList()}>add_it</el-button>
                   <el-button onClick={val => this.deleteoneList(evevt)}>
                     delet_it
                   </el-button>
@@ -101,7 +172,7 @@ export default {
               );
             } else {
               return (
-                <el-button onClick={val => this.addList}>add_it</el-button>
+                <el-button onClick={val => this.addList()}>add_it</el-button>
               );
             }
           }
