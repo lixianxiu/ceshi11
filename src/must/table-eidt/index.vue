@@ -1,10 +1,10 @@
 <template>
   <div>
-    <el-table :data="tableData" border sytle="width:400px" @cell-dblclick="handleChange">
+    <el-table :data="data" border sytle="width:400px" @cell-dblclick="handleChange">
       <el-table-column v-for="(col) in clolumns" :key="col.prop" v-bind="col"></el-table-column>
     </el-table>
-    <h1>实现一个可以添加的表格</h1>
-    <h2>the think is :</h2>
+    <h1>实现一个可以添加编辑的表格</h1>
+    <h2>the think is : who's data who handlewith</h2>
   </div>
 </template>
 
@@ -13,26 +13,32 @@ export default {
   props: {
     edit: {
       type: Boolean,
-      default: true
+      default: false
+    },
+    data: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            date: "",
+            name: "",
+            address: ""
+            // edit: false
+          }
+        ];
+      }
     }
   },
   created() {
+    console.log(this.data);
     this.edit && this.init();
   },
   data() {
     return {
-      tableData: [
-        {
-          date: "",
-          name: "",
-          address: ""
-          // edit: false
-        }
-      ],
       clolumns: [
         {
           prop: "date",
-          label: "one",
+          label: "your date",
           formatter: (row, cloumcell, index) => {
             console.log(row.edit);
             if (row.edit) {
@@ -42,28 +48,32 @@ export default {
                 </el-input>
               );
             } else {
-              return <span></span>;
+              return <span>{row.date}</span>;
             }
           }
         },
         {
           prop: "name",
-          label: "one",
+          label: " your name",
           formatter: (row, cloumcell, index) => {
             if (row.edit) {
               return (
-                <el-input value={row.name} onInput={e => (row.name = e)}>
+                <el-input
+                  placeholder="edit name"
+                  value={row.name}
+                  onInput={e => (row.name = e)}
+                >
                   add it
                 </el-input>
               );
             } else {
-              return <span></span>;
+              return <span>{row.name}</span>;
             }
           }
         },
         {
           prop: "address",
-          label: "one",
+          label: "your address",
           formatter: (row, cloumcell, index) => {
             if (row.edit) {
               return (
@@ -79,10 +89,21 @@ export default {
         {
           prop: "select",
           label: "operate",
-          formatter: (row, cloumcell, index) => {
-            return (
-              <el-button onClick={val => this.addList()}>add it</el-button>
-            );
+          formatter: (row, cloumcell, index, evevt) => {
+            if (evevt !== 0) {
+              return (
+                <div>
+                  <el-button onClick={val => this.addList}>add_it</el-button>
+                  <el-button onClick={val => this.deleteoneList(evevt)}>
+                    delet_it
+                  </el-button>
+                </div>
+              );
+            } else {
+              return (
+                <el-button onClick={val => this.addList}>add_it</el-button>
+              );
+            }
           }
         }
       ]
@@ -90,17 +111,19 @@ export default {
   },
 
   methods: {
-    //edit init option assign
     init() {
-      this.tableData.map(list => {
+      this.data.map(list => {
         this.$set(list, "edit", false);
       });
     },
-    addList(row, cell, index) {
-      debugger
+    addList() {
+      this.$emit("addObject");
+      this.init();
+    },
+    deleteoneList(idx) {
+      this.$emit("deletOneObject", idx);
     },
     handleChange(row, column, cell, event) {
-      console.log(row);
       row.edit = !row.edit;
     }
   }

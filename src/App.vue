@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <menu-nav></menu-nav> -->
     <!-- <mapDataFromComponey></mapDataFromComponey>  -->
-    <table-add></table-add>
+    <table-add :data="listGood" edit @addObject="addlist" @deletOneObject="deleteOneObject"></table-add>
     <!-- <conditionVue></conditionVue> -->
     <!-- <practice></practice> -->
     <!-- <simple :columns="columns" :data="tableData"></simple> -->
@@ -43,8 +43,8 @@ export default {
   components: {
     HelloWorld,
     Mock,
-    'menu-nav':()=>import('./demo/menu.vue'),
-    'table-add':()=>import('./must/table-eidt/index.vue'),
+    "menu-nav": () => import("./demo/menu.vue"),
+    "table-add": () => import("./must/table-eidt/index.vue"),
     mapDataFromComponey: () => import("./must/tableMap/index.vue"),
     conditionVue: () => import("./must/conditionvue/index.vue"),
     practice: () => import("./components/practiceRender.vue"),
@@ -67,6 +67,17 @@ export default {
     editTable: () => import("./demo/editTable/index.vue")
   },
   methods: {
+    /**
+     * 组件加对象
+     */
+    addlist() {
+      // debugger;
+      !!this.listGood &&
+        this.listGood.push({ date: "", name: "", address: "" });
+    },
+    deleteOneObject(index) {
+      !!this.listGood && this.listGood.splice(index, 1);
+    },
     renderTreeData(data) {
       console.log(data);
       let ul = document.createElement("ul");
@@ -145,7 +156,15 @@ export default {
   },
   data() {
     return {
-      list:'',
+      listGood: [
+        {
+          date: "",
+          name: "",
+          address: "",
+          // edit: false
+        }
+      ],
+      list: "",
       columns: [
         {
           type: "index",
